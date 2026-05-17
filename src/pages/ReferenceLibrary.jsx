@@ -1,7 +1,7 @@
 import { BookOpen, ExternalLink, Search, Download } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import { REGULATORY_REFS } from '../utils/gsrData.js';
-import { SectionHeader, Card, InfoBox, Badge, Input } from '../components/ui.jsx';
+import { SectionHeader, Card, InfoBox, Badge, Input, ModuleGuide } from '../components/ui.jsx';
 
 const SUPPLEMENTAL_REFS = [
   {
@@ -150,6 +150,26 @@ export default function ReferenceLibrary() {
         icon={BookOpen}
       />
 
+      <ModuleGuide
+        purpose="The Reference Library is your quick-access desk reference for every regulatory document, tool, and guidance publication cited in the NYSDEC GSR framework. Three major regulatory changes took effect in late 2025 — DER-31, Part 375, and the BCP Application were all updated simultaneously. Keeping current with these documents is critical; NYSDEC reviewers will flag any RAWP that references superseded versions."
+        regulation="DER-31 (Oct 2025) · 6 NYCRR Part 375 (Dec 31 2025) · BCP App Rev. Oct 2025"
+        outcome="Citation-ready references for any NYSDEC GSR submittal"
+        steps={[
+          { title: 'Search by keyword', detail: 'The search bar filters across document titles, descriptions, and tags simultaneously. Try terms like "BMP," "footprint," "SiteWise," "climate," or "RAWP" to find relevant references quickly.' },
+          { title: 'Filter by document type', detail: 'Use the type filter buttons (Regulatory, Guidance, Tool, Template) to narrow by category. "Regulatory" shows binding rules; "Guidance" shows interpretive documents; "Tool" shows calculators and software.' },
+          { title: 'Read the citation block', detail: 'Each card shows the proper citation format for use in a RAWP or FER. Copy the citation text directly into your references section.' },
+          { title: 'Note the Required badge', detail: 'Documents marked with a gold "Required" badge must be specifically addressed in every RAWP GSR section per DER-31. Everything else is referenced or optional supporting material.' },
+          { title: 'Check the 2025 updates', detail: 'The Key 2025 Updates banner below highlights the three most significant recent changes. RAWPs submitted after December 31, 2025 must comply with all three updated documents.' },
+        ]}
+        tips={[
+          'DER-31 is the primary GSR guidance document — it takes precedence over all other references. When in doubt, cite DER-31.',
+          '6 NYCRR Part 375 became effective December 31, 2025 with significant changes to cleanup standards for all tracks. Projects with an accepted BCP application before that date use the prior version — confirm which version applies to your project.',
+          'SiteWise™ v3.2 is the current accepted version. NYSDEC will flag calculations prepared with older versions.',
+          'ITRC GSR Guidance (2020) is non-binding but frequently cited by NYSDEC reviewers as supporting context for BMP selection decisions.',
+          'The BCP Application Questions 5 and 6 were added in the October 2025 revision — earlier application versions did not include these questions.',
+        ]}
+      />
+
       <InfoBox type="info" title="Key 2025 Regulatory Updates">
         Three major changes took effect in late 2025: (1) DER-31 revision requiring four-pillar GSR plans,
         (2) 6 NYCRR Part 375 comprehensive update (effective Dec 31, 2025), and (3) BCP Application
@@ -175,7 +195,7 @@ export default function ReferenceLibrary() {
               style={{
                 padding: '8px 14px', borderRadius: 6, border: 'none', cursor: 'pointer', fontSize: 12,
                 background: typeFilter === t ? 'var(--sunbeam)' : 'var(--graphite)',
-                color: typeFilter === t ? '#0D0D0D' : 'var(--smoke)',
+                color: typeFilter === t ? '#ffffff' : 'var(--smoke)',
                 fontWeight: typeFilter === t ? 700 : 400,
                 textTransform: 'capitalize',
               }}
@@ -207,7 +227,7 @@ export default function ReferenceLibrary() {
                   </p>
                 )}
                 {ref.note && (
-                  <div style={{ marginTop: 6, padding: '6px 10px', background: 'rgba(245,197,24,0.06)', borderRadius: 4, border: '1px solid rgba(245,197,24,0.15)' }}>
+                  <div style={{ marginTop: 6, padding: '6px 10px', background: 'rgba(189,86,45,0.06)', borderRadius: 4, border: '1px solid rgba(189,86,45,0.12)' }}>
                     <p style={{ margin: 0, fontSize: 12, color: 'var(--sunbeam)' }}>💡 {ref.note}</p>
                   </div>
                 )}

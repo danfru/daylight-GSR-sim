@@ -3,7 +3,7 @@ import { CloudLightning, CheckCircle, AlertTriangle, XCircle, ArrowRight } from 
 import { useGSR } from '../store/useGSR.js';
 import { CLIMATE_HAZARDS, NY_REGIONS } from '../utils/gsrData.js';
 import { calcClimateScore } from '../utils/gsrCalculations.js';
-import { SectionHeader, Card, InfoBox, Badge, Button, MetricCard, ProgressBar } from '../components/ui.jsx';
+import { SectionHeader, Card, InfoBox, Badge, Button, MetricCard, ProgressBar, ModuleGuide } from '../components/ui.jsx';
 
 const HAZARD_ICONS = {
   flooding:       '🌊',
@@ -83,10 +83,30 @@ export default function ClimateScreener() {
       {/* Intro / step 0 */}
       {step === 0 && (
         <div>
+          <ModuleGuide
+            purpose="The Climate Screener evaluates whether your site is vulnerable to six climate hazards identified in NYSDEC DER-31 §4.4 and BCP Application Question 6. The result determines if your RAWP needs a simple narrative screening statement or a full Climate Vulnerability Assessment (CVA) — a significantly more detailed analysis. Your NY region automatically weights the scoring to reflect local climate conditions."
+            regulation="DER-31 §4.4 · BCP App Q6 (Oct 2025) · NY Climate Act (2019)"
+            outcome="Screening result: Low / Moderate / High vulnerability + CVA determination"
+            steps={[
+              { title: 'Know your site region', detail: 'Set your NY region in Project Intake first — it affects the hazard weighting. NYC and Long Island have much higher coastal flooding and heat scores than the Adirondacks.' },
+              { title: 'Step through 6 hazard questions', detail: 'For each hazard (flooding, sea level rise, extreme heat, erosion, wildfire, drought) answer Yes or No based on known site conditions. Read the context information provided for each hazard — it explains what to look for.' },
+              { title: 'Understand the scoring', detail: 'Each Yes answer adds to a weighted vulnerability score. Scores are region-adjusted: a "flooding" Yes in NYC carries more weight than the same answer in western NY. The algorithm mirrors NYSDEC\'s DER-31 Table 4-1 approach.' },
+              { title: 'Read your result', detail: 'Low = screening statement sufficient. Moderate = recommend a CVA. High = full CVA required in the RAWP. The result is automatically referenced in your RAWP Builder narrative.' },
+              { title: 'Re-screen if conditions change', detail: 'Use the Re-screen button to start over. This is useful if site conditions change between project phases or if new climate data becomes available.' },
+            ]}
+            tips={[
+              'Not sure about a hazard? FEMA\'s Flood Map Service Center (msc.fema.gov) shows flood zone designations — a site in Zone AE is a "Yes" for flooding.',
+              'Sea Level Rise only applies to coastal sites within the 100-year tidal flood zone — most inland sites answer "No."',
+              'Wildfire risk in NY is generally low except for parts of Long Island Pine Barrens and some Catskill areas.',
+              'A High screening result doesn\'t mean the project can\'t proceed — it means the RAWP must include a CVA that identifies adaptation measures for the remedy design.',
+              'NYSDEC has published a Climate Vulnerability Assessment guidance document. DER-31 Appendix D contains the required CVA format.',
+            ]}
+          />
+
           <InfoBox type="info" title="DER-31 Climate Resiliency Requirement">
             BCP Application Question 6 and DER-31 §4.4 require a Climate Resiliency component in all GSR Plans.
             This screener walks you through six hazard categories. High-risk projects require a full
-            Climate Vulnerability Assessment (CVA).
+            Climate Vulnerability Assessment (CVA) prepared by a qualified professional.
           </InfoBox>
 
           <Card style={{ marginTop: 20, textAlign: 'center', padding: '40px 24px' }}>
@@ -184,7 +204,7 @@ export default function ClimateScreener() {
                   style={{
                     flex: 1, padding: '14px', borderRadius: 8, cursor: 'pointer',
                     border: `2px solid ${climate[ansKey] === false ? 'var(--signal-green)' : 'var(--graphite)'}`,
-                    background: climate[ansKey] === false ? 'rgba(76,175,80,0.1)' : 'var(--elevated)',
+                    background: climate[ansKey] === false ? 'rgba(150,161,83,0.10)' : 'var(--elevated)',
                     color: climate[ansKey] === false ? 'var(--signal-green)' : 'var(--smoke)',
                     fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 14,
                   }}

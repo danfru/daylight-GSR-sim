@@ -73,7 +73,7 @@ export const useGSR = create(
       climate: { ...DEFAULT_CLIMATE },
       selectedBMPs: [],         // array of BMP IDs
       fer: { ...DEFAULT_FER },
-      activeModule: 'intake',   // current nav module
+      activeModule: 'dashboard', // current nav module
       reportReady: false,
 
       // ─── Project Actions ────────────────────────────────────────────────────
@@ -167,12 +167,18 @@ export const useGSR = create(
 
       completionStatus: () => {
         const s = get();
+        // Check SiteWise results via its own store (read from localStorage directly to avoid circular deps)
+        let siteWiseDone = false;
+        try {
+          const sw = JSON.parse(localStorage.getItem('daylight-sitewise-store') || '{}');
+          siteWiseDone = !!(sw?.state?.results);
+        } catch {}
         return {
           intake:    !!(s.project.projectName && s.project.programType && s.project.phase),
           bmps:      s.selectedBMPs.length > 0,
-          footprint: !!(s.footprint.results),
+          sitewise:  siteWiseDone,
           climate:   !!(s.climate.result),
-          rawp:      !!(s.footprint.results && s.selectedBMPs.length > 0),
+          rawp:      !!(siteWiseDone && s.selectedBMPs.length > 0),
           fer:       !!(s.fer.planned.co2e),
           library:   true, // always accessible
         };

@@ -4,8 +4,9 @@ import {
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
 } from 'recharts';
 import { useGSR } from '../store/useGSR.js';
+import { useSiteWise } from '../store/useSiteWise.js';
 import { fmtMetric } from '../utils/gsrCalculations.js';
-import { SectionHeader, Card, InfoBox, MetricCard, Field, Input, Select, Textarea, Button, Badge, DataTable, Divider } from '../components/ui.jsx';
+import { SectionHeader, Card, InfoBox, MetricCard, Field, Input, Select, Textarea, Button, Badge, DataTable, Divider, ModuleGuide } from '../components/ui.jsx';
 
 const PHASE_OPTIONS = [
   { value: 'rawp_submission', label: 'RAWP Submission' },
@@ -26,21 +27,21 @@ export default function FERTracker() {
   const addFERActual = useGSR((s) => s.addFERActual);
   const updateFERActual = useGSR((s) => s.updateFERActual);
   const deleteFERActual = useGSR((s) => s.deleteFERActual);
-  const footprint = useGSR((s) => s.footprint);
+  const swResults = useSiteWise((s) => s.results);
 
   const [newEntry, setNewEntry] = useState(emptyActual());
   const [showAddForm, setShowAddForm] = useState(false);
 
-  // Pre-fill from footprint calculator if available
+  // Pre-fill from SiteWise calculator
   function prefillFromFootprint() {
-    if (footprint.results?.summary) {
-      const s = footprint.results.summary;
+    if (swResults?.netTotal) {
+      const t = swResults.netTotal;
       setFERPlanned({
-        co2e:  s.co2e,
-        nox:   s.nox,
-        sox:   s.sox,
-        pm10:  s.pm10,
-        mmbtu: s.totalMmbtu,
+        co2e:  +t.co2e.toFixed(3),
+        nox:   +t.nox.toFixed(4),
+        sox:   +t.sox.toFixed(4),
+        pm10:  +t.pm10.toFixed(4),
+        mmbtu: +t.energy_mmbtu.toFixed(1),
       });
     }
   }
@@ -114,9 +115,30 @@ export default function FERTracker() {
         icon={BarChart3}
       />
 
+      <ModuleGuide
+        purpose="The FER Tracker documents the environmental performance of your completed remediation against the planned baseline established in the RAWP. NYSDEC DER-31 §5 requires that the Final Engineering Report include a side-by-side comparison of projected vs. actual GSR metrics (GHG, energy, NOx, SOx, PM10) for each project phase. This module generates that comparison table, trend chart, and narrative for FER submittal."
+        regulation="DER-31 §5.1 · 6 NYCRR Part 375-1.9(f) · BCP FER Submittal Requirements"
+        outcome="Planned vs. actual GSR metrics table and trend chart for FER Appendix"
+        steps={[
+          { title: 'Import the planned baseline', detail: 'Click "Import from SiteWise™ Calculator" to automatically pull the net project totals (CO₂e, MMBTU, NOx, SOx, PM10) into the Planned Baseline row. These values come from the SiteWise™ analysis in your RAWP — they should match exactly.' },
+          { title: 'Add actual entries as work progresses', detail: 'After each significant remedial activity (mobilization, excavation, treatment operations, demobilization), add an actual entry with measured or estimated metrics for that phase. Date and phase are required; metric fields are optional — leave blank if not tracked.' },
+          { title: 'Track your running totals', detail: 'The Cumulative Actuals row updates automatically as you add entries. The % of Planned column shows how close you are to the RAWP baseline — flags appear if you\'re approaching or exceeding planned values.' },
+          { title: 'Use the trend chart', detail: 'The line chart shows CO₂e accumulation over time across all entries. This visualization is useful for FER narratives explaining the project\'s environmental performance trajectory.' },
+          { title: 'Export for FER appendix', detail: 'The table of actual entries can be selected and copied into your FER appendix. Format the dates to match your FER reporting period. NYSDEC reviewers compare the final cumulative totals to the RAWP baseline values.' },
+        ]}
+        tips={[
+          'DER-31 does not require field measurements of actual emissions — reasonable estimates based on fuel consumption records, equipment hours logs, and utility bills are acceptable.',
+          'If actual totals significantly exceed planned values (>20% over on CO₂e or NOx), the FER should include a brief explanation — e.g., unexpected soil conditions requiring additional excavation.',
+          'The FER should reference the specific BMP implementation actions that were carried out during the remediation. Cross-reference with the BMPs selected in Module 2.',
+          'Some NYSDEC project managers request the SiteWise™ workbook itself as a FER appendix. Export the PDF from the SiteWise™ Calculator for that purpose.',
+          'For long-duration projects (multi-year O&M), consider adding entries quarterly aligned with groundwater monitoring rounds.',
+        ]}
+      />
+
       <InfoBox type="info" title="FER GSR Metrics Requirement">
-        The Final Engineering Report (FER) must include a comparison of planned vs. actual environmental
-        footprint metrics per DER-31 §5.1. This tracker generates the documentation needed for FER submission.
+        DER-31 §5 requires that the Final Engineering Report document planned vs. actual environmental
+        footprint metrics. Import the planned baseline from SiteWise™, then add actual entries as each
+        project phase is completed. NYSDEC reviewers compare the final cumulative totals to RAWP values.
       </InfoBox>
 
       {/* Planned baseline */}
@@ -125,9 +147,9 @@ export default function FERTracker() {
           <h3 style={{ margin: 0, fontSize: 13, color: 'var(--smoke)', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
             Planned Baseline (RAWP)
           </h3>
-          {footprint.results && (
+          {swResults && (
             <Button variant="ghost" size="sm" onClick={prefillFromFootprint}>
-              ↓ Import from Footprint Calculator
+              ↓ Import from SiteWise™ Calculator
             </Button>
           )}
         </div>

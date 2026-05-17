@@ -199,7 +199,7 @@ export default function FootprintCalculator() {
               {/* Significance threshold */}
               {threshold && (
                 <div style={{
-                  background: threshold.level === 'major' ? 'rgba(229,57,53,0.08)' : threshold.level === 'significant' ? 'rgba(255,159,10,0.08)' : 'rgba(76,175,80,0.08)',
+                  background: threshold.level === 'major' ? 'rgba(229,57,53,0.08)' : threshold.level === 'significant' ? 'rgba(255,159,10,0.08)' : 'rgba(150,161,83,0.08)',
                   border: `1px solid var(--${threshold.color})`,
                   borderRadius: 8,
                   padding: '12px 16px',

@@ -1,25 +1,39 @@
 import { useState } from 'react';
 import { FileText, Copy, Download, CheckCircle } from 'lucide-react';
 import { useGSR } from '../store/useGSR.js';
+import { useSiteWise } from '../store/useSiteWise.js';
 import { BMP_LIBRARY } from '../utils/gsrData.js';
 import { generateRAWPText } from '../utils/gsrCalculations.js';
-import { SectionHeader, Card, InfoBox, Badge, Button, MetricCard } from '../components/ui.jsx';
+import { SectionHeader, Card, InfoBox, Badge, Button, MetricCard, ModuleGuide } from '../components/ui.jsx';
 
 export default function RAWPBuilder() {
   const project = useGSR((s) => s.project);
-  const footprint = useGSR((s) => s.footprint);
   const climate = useGSR((s) => s.climate);
   const selectedBMPs = useGSR((s) => s.selectedBMPs);
+  const swResults = useSiteWise((s) => s.results);
 
   const [copied, setCopied] = useState(false);
   const [activeSection, setActiveSection] = useState('all');
 
-  const isReady = !!(project.projectName && footprint.results);
+  // Build a footprint-compatible object from SiteWise net totals so generateRAWPText still works
+  const footprintCompat = swResults ? {
+    results: {
+      summary: {
+        co2e:       swResults.netTotal.co2e,
+        totalMmbtu: swResults.netTotal.energy_mmbtu,
+        nox:        swResults.netTotal.nox,
+        sox:        swResults.netTotal.sox,
+        pm10:       swResults.netTotal.pm10,
+      },
+    },
+  } : null;
+
+  const isReady = !!(project.projectName && footprintCompat);
   const hasClimate = !!(climate.result);
   const bmpObjects = selectedBMPs.map((id) => BMP_LIBRARY.find((b) => b.id === id)).filter(Boolean);
 
   const rawpText = isReady
-    ? generateRAWPText(project, footprint, selectedBMPs, climate.result)
+    ? generateRAWPText(project, footprintCompat, selectedBMPs, climate.result)
     : null;
 
   function copyToClipboard() {
@@ -44,7 +58,7 @@ export default function RAWPBuilder() {
   const SECTIONS = [
     { id: 'all',       label: 'Full Document' },
     { id: 'intro',     label: '1. Introduction' },
-    { id: 'footprint', label: '3. Footprint Analysis' },
+    { id: 'footprint', label: '3. Footprint Analysis (SiteWise™)' },
     { id: 'bmps',      label: '4. Best Management Practices' },
     { id: 'climate',   label: '5. Climate Resiliency' },
   ];
@@ -57,16 +71,36 @@ export default function RAWPBuilder() {
         icon={FileText}
       />
 
+      <ModuleGuide
+        purpose="The RAWP Builder assembles the complete GSR section of your Remedial Action Work Plan from data entered across all modules. It produces DER-31-compliant regulatory language covering all four GSR pillars — automatically pulling in your project data, SiteWise™ footprint metrics, selected BMPs with site-specific justifications, and your climate screening result. The output is formatted for direct insertion into a RAWP or as a standalone GSR Plan document."
+        regulation="DER-31 §4.3 · 6 NYCRR Part 375-1.9(e) · BCP App Q5 & Q6"
+        outcome="Copy-ready or downloadable GSR section text for RAWP submission"
+        steps={[
+          { title: 'Complete the 4 prerequisites', detail: 'The four readiness indicators below show which modules still need data. Project Setup and SiteWise™ are required to generate any text. BMPs and Climate Screening add additional sections. All four should be green before final RAWP preparation.' },
+          { title: 'Select a section view', detail: 'Use the section tabs to review individual sections (Introduction, Footprint Analysis, BMPs, Climate) or view the full assembled document. This lets you spot-check individual sections without scrolling the entire document.' },
+          { title: 'Review and copy the text', detail: 'The generated text uses your actual project data — site name, program type, footprint metrics, and BMP details. Read through carefully and verify all values match your project records. Use the Copy button to copy the full text to your clipboard.' },
+          { title: 'Download the .txt file', detail: 'The Download button saves the full GSR section as a plain text file that can be pasted into Word, Bluebeam, or any document editor. Plain text formatting is intentional — Word will apply your firm\'s document template.' },
+          { title: 'Copy individual BMP blocks', detail: 'Scroll below the main document to find individual BMP language blocks. Each can be copied independently — useful if BMPs need to go in different sections of a complex RAWP.' },
+        ]}
+        tips={[
+          'NYSDEC DER-31 §4.3.2 specifies the required RAWP GSR section format. The generated text matches this format but should be reviewed by the project QEP before submission.',
+          'The footprint significance determination (significant vs. below threshold) is automatically included based on your SiteWise™ results.',
+          'BMP language blocks include the standard NYSDEC RAWP format: practice description, applicability rationale, and implementation commitment. Customize the site-specific details before submitting.',
+          'If you update any module data, come back to the RAWP Builder — the text regenerates automatically from the latest store values.',
+          'The RAWP Builder does not yet produce a formatted PDF. For the full formatted GSR Footprint Summary PDF with certification block, use the SiteWise™ Calculator export.',
+        ]}
+      />
+
       {/* Readiness check */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 20 }}>
         {[
           { label: 'Project Setup', done: !!(project.projectName && project.programType), mod: 'intake' },
           { label: 'BMPs Selected', done: selectedBMPs.length > 0, mod: 'bmps' },
-          { label: 'Footprint Calc', done: !!(footprint.results), mod: 'footprint' },
+          { label: 'SiteWise™ Calc', done: !!swResults, mod: 'sitewise' },
           { label: 'Climate Screen', done: hasClimate, mod: 'climate' },
         ].map((item) => (
           <div key={item.label} style={{
-            background: item.done ? 'rgba(76,175,80,0.08)' : 'var(--graphite)',
+            background: item.done ? 'rgba(150,161,83,0.08)' : 'var(--graphite)',
             border: `1px solid ${item.done ? 'rgba(76,175,80,0.3)' : 'var(--elevated)'}`,
             borderRadius: 8,
             padding: '12px 14px',
@@ -103,7 +137,7 @@ export default function RAWPBuilder() {
                   onClick={() => setActiveSection(s.id)}
                   style={{
                     display: 'block', width: '100%', textAlign: 'left', padding: '7px 10px',
-                    background: activeSection === s.id ? 'rgba(245,197,24,0.08)' : 'none',
+                    background: activeSection === s.id ? 'rgba(189,86,45,0.08)' : 'none',
                     border: 'none', borderLeft: activeSection === s.id ? '2px solid var(--sunbeam)' : '2px solid transparent',
                     cursor: 'pointer', color: activeSection === s.id ? 'var(--bone)' : 'var(--smoke)',
                     fontSize: 13, borderRadius: '0 4px 4px 0', marginBottom: 2,

@@ -1,0 +1,176 @@
+/* ── Impact Environmental Brand System — Token Set ───────────────────────── */
+/* Source: IMPACT_BRAND_SYSTEM.md v2026.2                                     */
+
+@import url("https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Barlow+Condensed:wght@400;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap");
+
+/* ── Brand Palette (immutable) ───────────────────────────────────────────── */
+:root {
+  --ie-sinopia:        #bd562d;
+  --ie-chocolate-web:  #e37115;
+  --ie-burnt-orange:   #a3551d;
+  --ie-seal-brown:     #54301a;
+  --ie-bronze:         #ba8748;
+  --ie-drab-brown:     #443717;
+
+  --ie-white:          #ffffff;
+  --ie-bone:           #e4ded3;
+  --ie-khaki-web:      #cbbba0;
+  --ie-quicksilver:    #a8a198;
+  --ie-grey:           #7b766d;
+  --ie-black:          #000000;
+
+  --ie-raw-umber:      #8f6a57;
+  --ie-charcoal-blue:  #323e4c;
+  --ie-slate-grey:     #7b8d9b;
+  --ie-cadet-grey:     #98b1c1;
+  --ie-blue-sapphire:  #185676;
+
+  --ie-iec-orange:     #e77826;
+  --ie-icl-moss:       #96a153;
+  --ie-im-battleship:  #7d8685;
+  --ie-isw-gold:       #e5a724;
+  --ie-ibp-fuchsia:    #955d86;
+  --ie-drone-blue:     #5e9caf;
+  --ie-atomic-blue:    #2b4f60;
+
+  /* ── Semantic (light mode defaults) ───────────────────────────────────── */
+  --ie-bg:             #ffffff;
+  --ie-surface:        #e4ded3;
+  --ie-card:           #ffffff;
+  --ie-card-alt:       #e4ded3;
+  --ie-card-sunken:    #f0ebe4;
+  --ie-border:         #cbbba0;
+  --ie-border-strong:  #a8a198;
+  --ie-text-heading:   #443717;
+  --ie-text-primary:   #54301a;
+  --ie-text-secondary: #7b766d;
+  --ie-text-tertiary:  #a8a198;
+  --ie-text-inverse:   #ffffff;
+  --ie-accent:         #bd562d;
+  --ie-accent-hover:   #e37115;
+  --ie-accent-active:  #a3551d;
+
+  /* Status */
+  --ie-success:        #96a153;
+  --ie-warning:        #e5a724;
+  --ie-error:          #bd562d;
+  --ie-info:           #185676;
+
+  /* Typography */
+  --ie-font-display:   "Barlow", "DIN 2014", system-ui, sans-serif;
+  --ie-font-condensed: "Barlow Condensed", "DIN Condensed", system-ui, sans-serif;
+  --ie-font-body:      "Barlow", -apple-system, "Segoe UI", Roboto, sans-serif;
+  --ie-font-mono:      "JetBrains Mono", "SF Mono", Consolas, monospace;
+
+  /* Spacing */
+  --ie-space-1: 4px;   --ie-space-2: 8px;   --ie-space-3: 12px;
+  --ie-space-4: 16px;  --ie-space-5: 24px;  --ie-space-6: 32px;
+  --ie-space-7: 48px;  --ie-space-8: 64px;  --ie-space-9: 96px;
+
+  /* Radius */
+  --ie-radius-sm: 4px;
+  --ie-radius-md: 8px;
+  --ie-radius-lg: 12px;
+  --ie-radius-pill: 999px;
+
+  /* Shadows */
+  --ie-shadow-1: 0 1px 2px rgba(84, 48, 26, 0.08);
+  --ie-shadow-2: 0 4px 12px rgba(84, 48, 26, 0.10);
+  --ie-shadow-3: 0 12px 32px rgba(84, 48, 26, 0.14);
+
+  /* ── Legacy aliases ───────────────────────────────────────────────────── */
+  --dl-crt-black:      var(--ie-bg);
+  --dl-ink:            var(--ie-card);
+  --dl-graphite:       var(--ie-card);
+  --dl-elevated:       var(--ie-card-alt);
+  --dl-hover:          var(--ie-surface);
+  --dl-sunbeam:        var(--ie-accent);
+  --dl-amber:          var(--ie-bronze);
+  --dl-burnt-gold:     var(--ie-burnt-orange);
+  --dl-bone:           var(--ie-text-primary);
+  --dl-smoke:          var(--ie-text-secondary);
+  --dl-sage:           var(--ie-icl-moss);
+  --dl-slate-blue:     var(--ie-blue-sapphire);
+  --dl-terracotta:     var(--ie-sinopia);
+  --dl-green:          var(--ie-icl-moss);
+  --dl-warning:        var(--ie-isw-gold);
+  --dl-red:            var(--ie-sinopia);
+  --dl-phosphor:       var(--ie-icl-moss);
+  --dl-terminal-amber: var(--ie-bronze);
+  --dl-border-crt:     var(--ie-border);
+  --dl-border-input:   var(--ie-border);
+  --dl-shadow-card:    var(--ie-shadow-2);
+  --dl-shadow-focus:   0 0 0 2px rgba(189, 86, 45, 0.20);
+  --dl-glow-crt:       none;
+  --dl-font-pixel:     var(--ie-font-condensed);
+  --dl-font-terminal:  var(--ie-font-condensed);
+  --dl-font-sub:       var(--ie-font-display);
+  --dl-font-data:      var(--ie-font-mono);
+  --dl-font-body:      var(--ie-font-body);
+
+  --midnight:    var(--ie-bg);
+  --ink:         var(--ie-card);
+  --graphite:    var(--ie-card);
+  --elevated:    var(--ie-card-alt);
+  --sunbeam:     var(--ie-accent);
+  --amber:       var(--ie-bronze);
+  --burnt-gold:  var(--ie-burnt-orange);
+  --bone:        var(--ie-text-primary);
+  --smoke:       var(--ie-text-secondary);
+  --sage:        var(--ie-icl-moss);
+  --slate-blue:  var(--ie-blue-sapphire);
+  --terracotta:  var(--ie-sinopia);
+  --signal-green: var(--ie-icl-moss);
+  --alert-amber:  var(--ie-isw-gold);
+  --alert-red:    var(--ie-sinopia);
+  --l0:           var(--ie-bg);
+  --l1:           var(--ie-surface);
+  --l2:           var(--ie-border);
+  --shadow-card:  var(--ie-shadow-2);
+  --border-subtle: 1px solid var(--ie-border);
+  --border-gold:   1px solid rgba(189, 86, 45, 0.25);
+  --font-display:  var(--ie-font-display);
+  --font-body:     var(--ie-font-body);
+  --font-mono:     var(--ie-font-mono);
+  --font-pixel:    var(--ie-font-condensed);
+  --font-terminal: var(--ie-font-condensed);
+}
+
+/* ── Dark Mode Overrides ─────────────────────────────────────────────────── */
+[data-theme="dark"] {
+  --ie-bg:             #1e1509;
+  --ie-surface:        #261b0b;
+  --ie-card:           #2e1e0c;
+  --ie-card-alt:       #3a2410;
+  --ie-card-sunken:    #221408;
+  --ie-border:         #4d3218;
+  --ie-border-strong:  #6b4825;
+
+  --ie-text-heading:   #f0e8dc;
+  --ie-text-primary:   #e4ded3;
+  --ie-text-secondary: #9e8870;
+  --ie-text-tertiary:  #6a5840;
+  --ie-text-inverse:   #ffffff;
+
+  --ie-accent:         #e37115;
+  --ie-accent-hover:   #f08a30;
+  --ie-accent-active:  #bd562d;
+
+  /* Shadows warmer/darker in dark mode */
+  --ie-shadow-1: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --ie-shadow-2: 0 4px 14px rgba(0, 0, 0, 0.4);
+  --ie-shadow-3: 0 12px 36px rgba(0, 0, 0, 0.5);
+
+  /* Re-map legacy aliases for dark mode */
+  --dl-bone:    #e4ded3;
+  --dl-smoke:   #9e8870;
+  --dl-graphite: #2e1e0c;
+  --dl-elevated: #3a2410;
+  --dl-ink:      #261b0b;
+  --midnight:    #1e1509;
+  --graphite:    #2e1e0c;
+  --elevated:    #3a2410;
+  --ink:         #261b0b;
+  --bone:        #e4ded3;
+  --smoke:       #9e8870;
+}

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { ClipboardList, RefreshCw } from 'lucide-react';
 import { useGSR } from '../store/useGSR.js';
 import { PROGRAM_TYPES, PROJECT_PHASES, CLEANUP_TRACKS, NY_REGIONS, REMEDY_TECHNOLOGIES } from '../utils/gsrData.js';
-import { Field, Input, Select, Textarea, SectionHeader, Card, InfoBox, Badge, Button, CheckItem } from '../components/ui.jsx';
+import { Field, Input, Select, Textarea, SectionHeader, Card, InfoBox, Badge, Button, CheckItem, ModuleGuide } from '../components/ui.jsx';
 
 const CONTAMINANT_OPTIONS = [
   { value: 'petroleum_hyd',    label: 'Petroleum Hydrocarbons (PHCs)' },
@@ -64,10 +64,30 @@ export default function ProjectIntake() {
         }
       />
 
-      <InfoBox type="info" title="DER-31 Requirement">
-        All NYSDEC BCP projects with a RAWP or FER submitted after December 31, 2025 must include a
-        GSR Plan addressing the four core pillars. BCP Application Questions 5 and 6 now require
-        explicit GSR and Climate commitments.
+      <ModuleGuide
+        purpose="Project Intake is the foundation of your GSR analysis. Every field entered here — program type, phase, cleanup track, contaminants, and remedy technologies — flows automatically into the SiteWise™ Calculator, RAWP Builder, Climate Screener, and FER Tracker. Getting this right upfront saves rework in every downstream module."
+        regulation="DER-31 (Oct 2025) · BCP App Questions 5 & 6 · 6 NYCRR Part 375-1.9(e)"
+        outcome="Pre-populated context in all 6 modules"
+        steps={[
+          { title: 'Select your program type', detail: 'BCP Volunteer, BCP Participant, State Superfund, and VCP each have different GSR requirements and submittal forms. This controls which regulatory checklists and BMP defaults are applied.' },
+          { title: 'Set the project phase', detail: 'RI, FS, RD, Remedial Action, FER — determines which SiteWise™ components are relevant and what language the RAWP Builder will generate.' },
+          { title: 'Choose the cleanup track', detail: 'Track 1–4 dictates the applicable cleanup standards (6 NYCRR Part 375-3). Track 4 (unrestricted) has the highest remediation burden and typically the largest footprint.' },
+          { title: 'Select contaminants and remedy technologies', detail: 'These drive BMP recommendations in the BMP Selector and narrative language in the RAWP. Multi-select all that apply — mixed-contaminant sites are common.' },
+          { title: 'Complete the GSR Readiness Checklist', detail: 'Six required commitments that must be addressed in BCP Application Questions 5 and 6. All six must be checked before RAWP submission. NYSDEC reviewers check this list during completeness review.' },
+        ]}
+        tips={[
+          'Not sure which cleanup track? Track 2 (commercial/industrial) is most common for urban BCP sites. Track 4 is only required when unrestricted use is the goal.',
+          'BCP Application Q5 asks for your GSR Plan commitment — this checklist is your documentation for that answer.',
+          'BCP Application Q6 (Climate Vulnerability) is addressed by completing the Climate Screener module.',
+          'The BCP Acceptance Date is used to determine which version of Part 375 and DER-31 applies to your project.',
+        ]}
+      />
+
+      <InfoBox type="info" title="DER-31 Four Pillars of GSR">
+        All NYSDEC BCP projects with a RAWP or FER submitted after December 31, 2025 must address:
+        (1) Project Planning &amp; Stakeholder Engagement, (2) Environmental Footprint Analysis,
+        (3) BMP Evaluation, and (4) Climate Resiliency Screening. BCP Application Questions 5 and 6
+        now require explicit GSR and Climate commitments at application stage.
       </InfoBox>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginTop: 20 }}>

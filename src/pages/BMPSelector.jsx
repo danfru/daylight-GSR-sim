@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { Leaf, Search, X, ChevronRight, CheckCircle } from 'lucide-react';
 import { useGSR } from '../store/useGSR.js';
 import { BMP_LIBRARY, BMP_CATEGORIES } from '../utils/gsrData.js';
-import { SectionHeader, Card, InfoBox, Badge, Button, Input, MetricCard } from '../components/ui.jsx';
+import { SectionHeader, Card, InfoBox, Badge, Button, Input, MetricCard, ModuleGuide } from '../components/ui.jsx';
 
 const EFFORT_COLORS = { low: 'green', medium: 'amber', high: 'red' };
 const IMPACT_COLORS = { low: 'default', medium: 'amber', high: 'gold' };
@@ -59,9 +59,29 @@ export default function BMPSelector() {
         </div>
       )}
 
+      <ModuleGuide
+        purpose="Best Management Practices (BMPs) are the core of the GSR Plan. DER-31 §4 requires that applicants evaluate all applicable BMPs across the four GSR pillars and document selected practices in the RAWP. This module lets you browse all 17 NYSDEC-recognized BMPs, understand their environmental impact and implementation effort, and generate the exact regulatory language needed for your RAWP submission."
+        regulation="DER-31 §4 · BCP App Q5 · ITRC GSR Guidance (2020)"
+        outcome="RAWP-ready BMP language blocks for each selected practice"
+        steps={[
+          { title: 'Browse by category', detail: 'Use the left sidebar to filter by the four DER-31 pillars: Project Planning, Footprint Reduction, Treatment & Disposal, and Site Ecology. "All BMPs" shows the complete library.' },
+          { title: 'Search for specific practices', detail: 'The search bar filters by BMP name, description, and category. Useful when you already know which BMPs you plan to implement (e.g., search "solar" or "native plantings").' },
+          { title: 'Expand cards to read RAWP language', detail: 'Click the arrow on any BMP card to expand it and preview the pre-written regulatory language. This is the exact text that will appear in your RAWP GSR section.' },
+          { title: 'Toggle to select', detail: 'Click anywhere on the card (or the Select button) to add it to your project. Selected BMPs are highlighted and tracked in the header count. You can change your selections at any time.' },
+          { title: 'Review in RAWP Builder', detail: 'Once you\'ve selected all applicable BMPs, go to the RAWP Builder (step 5) to see them assembled into a complete, formatted GSR section document.' },
+        ]}
+        tips={[
+          'DER-31 does not specify a minimum number of BMPs — NYSDEC expects applicants to select all that are technically feasible for the site conditions.',
+          'High-impact BMPs (marked with a gold badge) have the greatest potential to reduce GHG emissions and should be prioritized for inclusion.',
+          'Even if a BMP is not feasible, DER-31 requires that you document why it was evaluated and rejected. Use the RAWP Builder notes field for this.',
+          'BMP language blocks are pre-written to meet DER-31 §4.3 format requirements — but always review and customize them for your specific site conditions.',
+        ]}
+      />
+
       <InfoBox type="info" title="DER-31 BMP Requirement">
-        NYSDEC DER-31 requires that the RAWP document an evaluation of applicable BMPs across the
-        four pillars. Selected BMPs generate ready-to-use RAWP language in Module 5.
+        NYSDEC DER-31 §4 requires evaluation of applicable BMPs across all four GSR pillars.
+        Selected BMPs are automatically compiled into RAWP-ready report language in the RAWP Builder.
+        NYSDEC reviewers verify that the BMP evaluation is documented and justified.
       </InfoBox>
 
       <div style={{ display: 'grid', gridTemplateColumns: '180px 1fr', gap: 20, marginTop: 20 }}>
@@ -83,7 +103,7 @@ export default function BMPSelector() {
                     justifyContent: 'space-between',
                     width: '100%',
                     padding: '9px 12px',
-                    background: isActive ? 'rgba(245,197,24,0.08)' : 'none',
+                    background: isActive ? 'rgba(189,86,45,0.08)' : 'none',
                     border: 'none',
                     borderLeft: isActive ? '3px solid var(--sunbeam)' : '3px solid transparent',
                     borderRadius: '0 6px 6px 0',
@@ -129,8 +149,8 @@ export default function BMPSelector() {
                 <Card
                   key={bmp.id}
                   style={{
-                    border: isSelected ? '1px solid rgba(245,197,24,0.4)' : '1px solid var(--graphite)',
-                    background: isSelected ? 'rgba(245,197,24,0.04)' : 'var(--graphite)',
+                    border: isSelected ? '1px solid rgba(189,86,45,0.40)' : '1px solid var(--graphite)',
+                    background: isSelected ? 'rgba(189,86,45,0.04)' : 'var(--graphite)',
                     cursor: 'pointer',
                   }}
                 >
@@ -145,7 +165,7 @@ export default function BMPSelector() {
                       border: `1px solid ${isSelected ? 'var(--sunbeam)' : 'var(--smoke)'}`,
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                     }}>
-                      {isSelected && <CheckCircle size={13} color="#0D0D0D" />}
+                      {isSelected && <CheckCircle size={13} color="#ffffff" />}
                     </div>
 
                     {/* Content */}

@@ -1,9 +1,4 @@
-/**
- * Daylight Labs UI Component Library
- * Reusable primitives for the GSR Simulator
- */
-
-import { AlertTriangle, CheckCircle, Info, XCircle, ChevronDown, ChevronUp } from 'lucide-react';
+import { AlertTriangle, CheckCircle, Info, XCircle, ChevronDown, ChevronUp, HelpCircle, BookOpen } from 'lucide-react';
 import { useState } from 'react';
 
 // ─── Field / Label ───────────────────────────────────────────────────────────
@@ -14,12 +9,12 @@ export function Field({ label, hint, error, required, children, className = '' }
       {label && (
         <label className="field-label">
           {label}
-          {required && <span style={{ color: 'var(--sunbeam)', marginLeft: 4 }}>*</span>}
+          {required && <span style={{ color: 'var(--ie-accent)', marginLeft: 4 }}>*</span>}
         </label>
       )}
       {children}
       {hint && !error && <p className="field-hint">{hint}</p>}
-      {error && <p className="field-hint" style={{ color: 'var(--alert-red)' }}>{error}</p>}
+      {error && <p className="field-hint" style={{ color: 'var(--ie-error)' }}>{error}</p>}
     </div>
   );
 }
@@ -34,7 +29,7 @@ export function Select({ value, onChange, options, placeholder = 'Select…', di
       onChange={(e) => onChange(e.target.value)}
       disabled={disabled}
     >
-      {placeholder && <option value="">{placeholder}</option>}
+      {placeholder && <option key="_placeholder" value="">{placeholder}</option>}
       {options.map((opt) =>
         typeof opt === 'string'
           ? <option key={opt} value={opt}>{opt}</option>
@@ -89,7 +84,7 @@ export function Toggle({ checked, onChange, label, disabled = false }) {
       <div className={`toggle ${checked ? 'toggle-on' : ''}`} onClick={() => !disabled && onChange(!checked)}>
         <div className="toggle-knob" />
       </div>
-      {label && <span style={{ color: 'var(--bone)', fontSize: 14 }}>{label}</span>}
+      {label && <span style={{ color: 'var(--ie-text-primary)', fontSize: 14 }}>{label}</span>}
     </label>
   );
 }
@@ -135,11 +130,12 @@ export function MetricCard({ label, value, unit, sublabel, highlight = false, cl
 
 export function Badge({ children, color = 'default', size = 'sm' }) {
   const colorMap = {
-    default: { bg: 'var(--elevated)', color: 'var(--smoke)' },
-    green:   { bg: 'rgba(76,175,80,0.15)', color: 'var(--signal-green)' },
-    amber:   { bg: 'rgba(255,159,10,0.15)', color: 'var(--alert-amber)' },
-    red:     { bg: 'rgba(229,57,53,0.15)', color: 'var(--alert-red)' },
-    gold:    { bg: 'rgba(245,197,24,0.15)', color: 'var(--sunbeam)' },
+    default: { bg: 'var(--ie-surface)',              color: 'var(--ie-text-secondary)' },
+    green:   { bg: 'rgba(150, 161, 83, 0.12)',       color: '#4d6617' },
+    amber:   { bg: 'rgba(229, 167, 36, 0.12)',       color: '#7a5500' },
+    red:     { bg: 'rgba(189, 86, 45, 0.10)',        color: 'var(--ie-accent)' },
+    gold:    { bg: 'rgba(189, 86, 45, 0.08)',        color: 'var(--ie-accent)' },
+    blue:    { bg: 'rgba(24, 86, 118, 0.10)',        color: '#185676' },
   };
   const c = colorMap[color] || colorMap.default;
   return (
@@ -150,7 +146,7 @@ export function Badge({ children, color = 'default', size = 'sm' }) {
       padding: size === 'sm' ? '2px 8px' : '4px 12px',
       fontSize: size === 'sm' ? 11 : 13,
       fontWeight: 600,
-      fontFamily: 'var(--font-mono)',
+      fontFamily: 'var(--ie-font-body)',
       letterSpacing: '0.03em',
       display: 'inline-block',
     }}>
@@ -161,18 +157,19 @@ export function Badge({ children, color = 'default', size = 'sm' }) {
 
 // ─── ProgressBar ─────────────────────────────────────────────────────────────
 
-export function ProgressBar({ value, max = 100, color = 'sunbeam', label, showPct = true }) {
+export function ProgressBar({ value, max = 100, color = 'sinopia', label, showPct = true }) {
   const pct = Math.min(Math.max((value / max) * 100, 0), 100);
   const colorMap = {
-    sunbeam: 'var(--sunbeam)',
-    green:   'var(--signal-green)',
-    amber:   'var(--alert-amber)',
-    red:     'var(--alert-red)',
+    sinopia: 'var(--ie-accent)',
+    sunbeam: 'var(--ie-accent)',
+    green:   '#96a153',
+    amber:   '#e5a724',
+    red:     'var(--ie-error)',
   };
   return (
     <div>
       {(label || showPct) && (
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4, fontSize: 12, color: 'var(--smoke)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4, fontSize: 12, color: 'var(--ie-text-secondary)' }}>
           {label && <span>{label}</span>}
           {showPct && <span>{pct.toFixed(0)}%</span>}
         </div>
@@ -180,7 +177,7 @@ export function ProgressBar({ value, max = 100, color = 'sunbeam', label, showPc
       <div className="progress-bar">
         <div
           className="progress-fill"
-          style={{ width: `${pct}%`, background: colorMap[color] || colorMap.sunbeam }}
+          style={{ width: `${pct}%`, background: colorMap[color] || colorMap.sinopia }}
         />
       </div>
     </div>
@@ -199,7 +196,7 @@ export function CheckItem({ checked, onChange, children, disabled = false }) {
         style={{ display: 'none' }}
       />
       <span className="check-box">
-        {checked && <CheckCircle size={14} />}
+        {checked && <CheckCircle size={14} color="#ffffff" />}
       </span>
       <span>{children}</span>
     </label>
@@ -213,12 +210,12 @@ export function SectionHeader({ title, subtitle, icon: Icon, action }) {
     <div style={{ marginBottom: 24 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          {Icon && <Icon size={20} color="var(--sunbeam)" />}
-          <h2 style={{ margin: 0, fontSize: 18, fontFamily: 'var(--font-display)', color: 'var(--bone)' }}>{title}</h2>
+          {Icon && <Icon size={20} color="var(--ie-accent)" />}
+          <h2 style={{ margin: 0, fontSize: 18, fontFamily: 'var(--ie-font-display)', color: 'var(--ie-text-heading)', fontWeight: 700 }}>{title}</h2>
         </div>
         {action}
       </div>
-      {subtitle && <p style={{ margin: '6px 0 0 30px', color: 'var(--smoke)', fontSize: 13 }}>{subtitle}</p>}
+      {subtitle && <p style={{ margin: '6px 0 0 30px', color: 'var(--ie-text-secondary)', fontSize: 13 }}>{subtitle}</p>}
     </div>
   );
 }
@@ -244,14 +241,14 @@ export function Collapsible({ title, defaultOpen = false, children, badge }) {
         style={{
           width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           padding: '14px 18px', background: 'none', border: 'none', cursor: 'pointer',
-          color: 'var(--bone)', fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 600,
+          color: 'var(--ie-text-primary)', fontFamily: 'var(--ie-font-display)', fontSize: 14, fontWeight: 600,
         }}
       >
         <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           {title}
           {badge && badge}
         </span>
-        {open ? <ChevronUp size={16} color="var(--smoke)" /> : <ChevronDown size={16} color="var(--smoke)" />}
+        {open ? <ChevronUp size={16} color="var(--ie-text-secondary)" /> : <ChevronDown size={16} color="var(--ie-text-secondary)" />}
       </button>
       {open && (
         <div style={{ padding: '0 18px 16px' }}>
@@ -266,9 +263,9 @@ export function Collapsible({ title, defaultOpen = false, children, badge }) {
 
 export function EmptyState({ icon: Icon, title, description, action }) {
   return (
-    <div style={{ textAlign: 'center', padding: '48px 24px', color: 'var(--smoke)' }}>
-      {Icon && <Icon size={40} style={{ marginBottom: 16, opacity: 0.4 }} />}
-      <h3 style={{ margin: '0 0 8px', color: 'var(--bone)', fontSize: 16 }}>{title}</h3>
+    <div style={{ textAlign: 'center', padding: '48px 24px', color: 'var(--ie-text-secondary)' }}>
+      {Icon && <Icon size={40} style={{ marginBottom: 16, opacity: 0.35, color: 'var(--ie-text-tertiary)' }} />}
+      <h3 style={{ margin: '0 0 8px', color: 'var(--ie-text-primary)', fontSize: 16 }}>{title}</h3>
       {description && <p style={{ margin: '0 0 20px', fontSize: 13 }}>{description}</p>}
       {action}
     </div>
@@ -279,7 +276,7 @@ export function EmptyState({ icon: Icon, title, description, action }) {
 
 export function DataTable({ columns, rows, emptyMessage = 'No data' }) {
   if (!rows || rows.length === 0) {
-    return <p style={{ color: 'var(--smoke)', fontSize: 13, textAlign: 'center', padding: '24px 0' }}>{emptyMessage}</p>;
+    return <p style={{ color: 'var(--ie-text-secondary)', fontSize: 13, textAlign: 'center', padding: '24px 0' }}>{emptyMessage}</p>;
   }
   return (
     <div className="data-table-wrapper">
@@ -331,15 +328,135 @@ export function Button({ children, onClick, variant = 'primary', size = 'md', di
   );
 }
 
+// ─── ModuleGuide ─────────────────────────────────────────────────────────────
+
+export function ModuleGuide({ purpose, regulation, outcome, steps = [], tips = [] }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div style={{ marginBottom: 20 }}>
+      {/* Always-visible context strip */}
+      <div style={{
+        display: 'flex', alignItems: 'flex-start', gap: 14,
+        padding: '14px 18px',
+        background: 'var(--ie-surface)',
+        border: '1px solid var(--ie-border)',
+        borderRadius: open ? '8px 8px 0 0' : 8,
+        transition: 'border-radius 0.2s',
+      }}>
+        <BookOpen size={15} color="var(--ie-text-secondary)" style={{ marginTop: 2, flexShrink: 0 }} />
+        <div style={{ flex: 1 }}>
+          <p style={{ margin: 0, fontSize: 13, color: 'var(--ie-text-primary)', lineHeight: 1.65 }}>
+            {purpose}
+          </p>
+          {(regulation || outcome) && (
+            <div style={{ display: 'flex', gap: 10, marginTop: 8, flexWrap: 'wrap' }}>
+              {regulation && (
+                <span style={{
+                  fontFamily: 'var(--ie-font-mono)', fontSize: 9, color: 'var(--ie-accent)',
+                  letterSpacing: '0.08em', textTransform: 'uppercase',
+                  background: 'rgba(189, 86, 45, 0.08)', border: '1px solid rgba(189, 86, 45, 0.2)',
+                  borderRadius: 4, padding: '2px 7px',
+                }}>
+                  {regulation}
+                </span>
+              )}
+              {outcome && (
+                <span style={{
+                  fontFamily: 'var(--ie-font-mono)', fontSize: 9, color: '#4d6617',
+                  letterSpacing: '0.08em', textTransform: 'uppercase',
+                  background: 'rgba(150, 161, 83, 0.10)', border: '1px solid rgba(150, 161, 83, 0.25)',
+                  borderRadius: 4, padding: '2px 7px',
+                }}>
+                  Output: {outcome}
+                </span>
+              )}
+            </div>
+          )}
+        </div>
+        <button
+          onClick={() => setOpen(o => !o)}
+          style={{
+            display: 'inline-flex', alignItems: 'center', gap: 5,
+            background: open ? 'rgba(189, 86, 45, 0.08)' : 'var(--ie-card)',
+            border: `1px solid ${open ? 'rgba(189, 86, 45, 0.3)' : 'var(--ie-border)'}`,
+            borderRadius: 6, padding: '5px 11px', cursor: 'pointer',
+            color: open ? 'var(--ie-accent)' : 'var(--ie-text-secondary)',
+            fontSize: 11, fontFamily: 'var(--ie-font-body)', fontWeight: 600, flexShrink: 0,
+            transition: 'all 0.15s',
+          }}
+        >
+          <HelpCircle size={12} />
+          {open ? 'Hide guide' : 'How to use'}
+          {open ? <ChevronUp size={11} /> : <ChevronDown size={11} />}
+        </button>
+      </div>
+
+      {/* Expandable guide body */}
+      {open && (
+        <div style={{
+          background: 'var(--ie-card)',
+          border: '1px solid var(--ie-border)',
+          borderTop: 'none',
+          borderRadius: '0 0 8px 8px',
+          padding: '18px 20px',
+        }}>
+          {steps.length > 0 && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {steps.map((s, i) => (
+                <div key={i} style={{ display: 'flex', gap: 12 }}>
+                  <div style={{
+                    width: 26, height: 26, borderRadius: '50%', flexShrink: 0,
+                    background: 'rgba(189, 86, 45, 0.08)', border: '1px solid rgba(189, 86, 45, 0.25)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontFamily: 'var(--ie-font-mono)', fontSize: 11, fontWeight: 700, color: 'var(--ie-accent)',
+                  }}>
+                    {s.icon || (i + 1)}
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--ie-text-heading)',
+                      fontFamily: 'var(--ie-font-display)', marginBottom: 2 }}>{s.title}</div>
+                    <div style={{ fontSize: 12, color: 'var(--ie-text-secondary)', lineHeight: 1.6 }}>{s.detail}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+          {tips.length > 0 && (
+            <div style={{
+              marginTop: 16, padding: '10px 14px',
+              background: 'rgba(24, 86, 118, 0.05)', border: '1px solid rgba(24, 86, 118, 0.15)',
+              borderRadius: 7,
+            }}>
+              <div style={{ fontSize: 10, fontFamily: 'var(--ie-font-body)', fontWeight: 700,
+                color: '#185676', letterSpacing: '0.07em', marginBottom: 7, textTransform: 'uppercase' }}>
+                Tips &amp; Common Questions
+              </div>
+              {tips.map((tip, i) => (
+                <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 5 }}>
+                  <span style={{ color: 'var(--ie-accent)', fontSize: 12, flexShrink: 0 }}>›</span>
+                  <span style={{ fontSize: 12, color: 'var(--ie-text-primary)', lineHeight: 1.55 }}>{tip}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── Divider ─────────────────────────────────────────────────────────────────
 
 export function Divider({ label }) {
-  if (!label) return <hr style={{ border: 'none', borderTop: '1px solid var(--graphite)', margin: '20px 0' }} />;
+  if (!label) return <hr style={{ border: 'none', borderTop: '1px solid var(--ie-border)', margin: '20px 0' }} />;
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '20px 0' }}>
-      <div style={{ flex: 1, height: 1, background: 'var(--graphite)' }} />
-      <span style={{ color: 'var(--smoke)', fontSize: 11, fontFamily: 'var(--font-mono)', letterSpacing: '0.05em', whiteSpace: 'nowrap' }}>{label}</span>
-      <div style={{ flex: 1, height: 1, background: 'var(--graphite)' }} />
+      <div style={{ flex: 1, height: 1, background: 'var(--ie-border)' }} />
+      <span style={{ color: 'var(--ie-text-secondary)', fontSize: 11, fontFamily: 'var(--ie-font-body)', fontWeight: 600,
+        letterSpacing: '0.05em', whiteSpace: 'nowrap', textTransform: 'uppercase' }}>
+        {label}
+      </span>
+      <div style={{ flex: 1, height: 1, background: 'var(--ie-border)' }} />
     </div>
   );
 }
